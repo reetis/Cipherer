@@ -2,10 +2,22 @@
 <resources>
 
     <string name="app_name">Cipherer</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="buttonText">Vignere šifras</string>
     <string name="title_activity_vignere">Vignere</string>
+    <string name="vignere">Vignere</string>
+    <string name="encoded_text">Encoded Text</string>
+    <string name="key_text">Key</string>
+
+
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
+    <string-array name="drawer_titles">
+        <item>Tabs</item>
+        <item>WebView</item>
+    </string-array>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
