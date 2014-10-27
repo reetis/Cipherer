@@ -3,7 +3,7 @@
     package="com.rytis.cipherer" >
 
     <uses-sdk
-        android:minSdkVersion="17"
+        android:minSdkVersion="14"
         android:targetSdkVersion="21" />
 
     <application
@@ -21,8 +21,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Vignere"
-            android:label="@string/title_activity_vignere"
+            android:name=".CipheringActivity"
+            android:label="@string/title_activity_ciphering"
             android:parentActivityName=".MenuActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

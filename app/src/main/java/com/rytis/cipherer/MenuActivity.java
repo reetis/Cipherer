@@ -27,7 +27,7 @@ public class MenuActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        menuListItems.add(new MyMenuItem(getString(R.string.vignere), Vignere.class));
+        menuListItems.add(new MyMenuItem(getString(R.string.vignere), CipheringActivity.class));
 
         menuList = (ListView) findViewById(R.id.menuList);
 
