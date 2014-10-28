@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.rytis.cipherer;
+package com.rytis.cipherer.widgets;
 
 import android.content.Context;
 import android.graphics.Typeface;
