@@ -26,6 +26,15 @@ public final class FragmentFactory {
         }
     }
 
+    public static String getLabelByID(int fragmentID) {
+        for(MyMenuItem i: ciphersList) {
+            if (i.getId() == fragmentID) {
+                return i.getLabel();
+            }
+        }
+        return null;
+    }
+
     public static LinkedList<MyMenuItem> getListOfCiphers(){
         if (ciphersList == null) {
             ciphersList = new LinkedList<>();

@@ -37,7 +37,7 @@ public class CipheringActivity extends ActionBarActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerContainer = (LinearLayout) findViewById(R.id.drawer_container);
 
-
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -65,6 +65,7 @@ public class CipheringActivity extends ActionBarActivity {
         fragmentManager.beginTransaction()
                 .replace(R.id.container, FragmentFactory.getFragment(fragmentID))
                 .commit();
+        getSupportActionBar().setTitle(FragmentFactory.getLabelByID(fragmentID));
     }
 
     public void switchFragment(MyMenuItem listObject, int position) {
