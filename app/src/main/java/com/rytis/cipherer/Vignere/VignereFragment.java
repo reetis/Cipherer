@@ -14,10 +14,12 @@ import com.rytis.cipherer.widgets.SlidingTabLayout;
 
 import java.util.ArrayList;
 
-public class VignereFragment extends Fragment {
+public class VignereFragment extends Fragment implements DecodedFragment.DecodedInteractionListener, EncodedFragment.EncodedInteractionListener {
 
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mViewPager;
+    private TabsAdapter adapter;
+    private VignereCoder coder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,8 +30,9 @@ public class VignereFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        mViewPager.setAdapter(new TabsAdapter(getFragmentManager(), EncodedFragment.newInstance(),
-                EncodedFragment.newInstance()));
+        adapter = new TabsAdapter(getChildFragmentManager(), EncodedFragment.newInstance(), DecodedFragment.newInstance());
+        mViewPager.setAdapter(adapter);
+        coder = new VignereCoder();
 
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setDistributeEvenly(true);
@@ -42,7 +45,14 @@ public class VignereFragment extends Fragment {
 
             @Override
             public void onPageSelected(int i) {
-
+                Fragment fragment = adapter.getItem(i);
+                if (i == 0) {
+                    coder.encode();
+                    ((EncodedFragment) fragment).setValues(coder.getEncodedText(), coder.getKey());
+                } else {
+                    coder.decode();
+                    ((DecodedFragment) fragment).setValues(coder.getDecodedText(), coder.getKey());
+                }
             }
 
             @Override
@@ -54,6 +64,21 @@ public class VignereFragment extends Fragment {
 
     public static VignereFragment newInstance() {
         return new VignereFragment();
+    }
+
+    @Override
+    public void onChangedKey(String key) {
+        coder.setKey(key);
+    }
+
+    @Override
+    public void onChangedEncodedText(String text) {
+        coder.setEncodedText(text);
+    }
+
+    @Override
+    public void onChangedDecodedText(String text) {
+        coder.setDecodedText(text);
     }
 
     private class TabsAdapter extends FragmentStatePagerAdapter {
@@ -85,6 +110,112 @@ public class VignereFragment extends Fragment {
                 default:
                     return "Unknown tab";
             }
+        }
+    }
+
+    private class VignereCoder {
+        private String decodedText;
+        private String encodedText;
+        private String key;
+
+        private VignereCoder(String decodedText, String encodedText, String key) {
+            this.decodedText = decodedText;
+            this.encodedText = encodedText;
+            this.key = key;
+        }
+
+        private VignereCoder() {
+            this("", "", "");
+        }
+
+        public String getDecodedText() {
+            return decodedText;
+        }
+
+        public void setDecodedText(String decodedText) {
+            this.decodedText = decodedText;
+            //encode();
+        }
+
+        public String getEncodedText() {
+            return encodedText;
+        }
+
+        public void setEncodedText(String encodedText) {
+            this.encodedText = encodedText;
+            //decode();
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public void encode() {
+            this.encodedText = encode(this.decodedText, this.key);
+        }
+
+        public void decode() {
+            this.decodedText = decode(this.encodedText, this.key);
+        }
+
+        public String encode(String text, String key) {
+            String encoded = "";
+            if (key.isEmpty()){
+                encoded = text;
+            } else {
+                key = key.toLowerCase();
+                ArrayList<Integer> keyValues = new ArrayList<>();
+                for (int i = 0; i < key.length(); ++i) {
+                    char c = key.charAt(i);
+                    if (c >= 'a' && c <= 'z') {
+                        keyValues.add( c - 'a' );
+                    } else {
+                        keyValues.add(0);
+                    }
+                }
+                for (int i = 0; i < text.length(); ++i) {
+                    char c = text.charAt(i);
+                    if (c >= 'a' && c <= 'z') {
+                        c = (char) ((c - 'a' + keyValues.get(i % keyValues.size())) % 26);
+                    } else if (c >= 'A' && c <= 'Z') {
+                        c = (char) ((c - 'A' + keyValues.get(i % keyValues.size())) % 26);
+                    }
+                    encoded = encoded.concat(String.valueOf(c));
+                }
+            }
+            return encoded;
+        }
+
+        private String decode(String text, String key) {
+            String decoded = "";
+            if (key.isEmpty()){
+                decoded = text;
+            } else {
+                key = key.toLowerCase();
+                ArrayList<Integer> keyValues = new ArrayList<>();
+                for (int i = 0; i < key.length(); ++i) {
+                    char c = key.charAt(i);
+                    if (c >= 'a' && c <= 'z') {
+                        keyValues.add( c - 'a' );
+                    } else {
+                        keyValues.add(0);
+                    }
+                }
+                for (int i = 0; i < text.length(); ++i) {
+                    char c = text.charAt(i);
+                    if (c >= 'a' && c <= 'z') {
+                        c = (char) ((c - 'a' + 26 - keyValues.get(i % keyValues.size())) % 26);
+                    } else if (c >= 'A' && c <= 'Z') {
+                        c = (char) ((c - 'A' + 26 - keyValues.get(i % keyValues.size())) % 26);
+                    }
+                    decoded = decoded.concat(String.valueOf(c));
+                }
+            }
+            return decoded;
         }
     }
 }

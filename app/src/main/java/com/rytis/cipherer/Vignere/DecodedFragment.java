@@ -13,21 +13,29 @@ import android.widget.EditText;
 
 import com.rytis.cipherer.R;
 
-/**
-* Created by rytis on 14.10.29.
-*/
-public class EncodedFragment extends Fragment {
+public class DecodedFragment extends Fragment {
     EditText text;
     EditText key;
-    private EncodedInteractionListener mListener;
 
-    public EncodedFragment() {
+    private DecodedInteractionListener mListener;
+
+    public DecodedFragment() {
+        // Required empty public constructor
+    }
+
+    public static DecodedFragment newInstance(){
+        return new DecodedFragment();
+    }
+
+    public void setValues(String text, String key) {
+        this.text.setText(text);
+        this.key.setText(key);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_vignere_cipher, container, false);
+        View view = inflater.inflate(R.layout.fragment_vignere_text, container, false);
         return view;
     }
 
@@ -35,7 +43,7 @@ public class EncodedFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        text = (EditText) view.findViewById(R.id.encodedText);
+        text = (EditText) view.findViewById(R.id.decodedText);
         key = (EditText) view.findViewById(R.id.keyText);
 
         text.addTextChangedListener(new TextWatcher() {
@@ -51,7 +59,7 @@ public class EncodedFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                mListener.onChangedEncodedText(editable.toString());
+                mListener.onChangedDecodedText(editable.toString());
             }
         });
 
@@ -68,33 +76,24 @@ public class EncodedFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (mListener != null) {
-                    mListener.onChangedKey(editable.toString());
-                }
+                mListener.onChangedKey(editable.toString());
             }
         });
 
-    }
-
-    public static EncodedFragment newInstance(){
-        return new EncodedFragment();
-    }
-
-    public void setValues(String text, String key) {
-        this.text.setText(text);
-        this.key.setText(key);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (EncodedInteractionListener) getParentFragment();
+            mListener = (DecodedInteractionListener) getParentFragment();
         } catch (ClassCastException e) {
             throw new ClassCastException(getParentFragment().toString()
-                    + " must implement EncoderInteractionListener");
+                    + " must implement DecoderInteractionListener");
         }
     }
+
+
 
     @Override
     public void onDetach() {
@@ -102,8 +101,10 @@ public class EncodedFragment extends Fragment {
         mListener = null;
     }
 
-    public interface EncodedInteractionListener {
+    public interface DecodedInteractionListener {
         public void onChangedKey(String key);
-        public void onChangedEncodedText(String text);
+        public void onChangedDecodedText(String text);
     }
+
+
 }
