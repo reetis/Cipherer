@@ -1,8 +1,8 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="windowActionModeOverlay">true</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <!--<item name="windowActionModeOverlay">true</item>--><!-- Uncomment if using toolbar -->
         <!-- Customize your theme here. -->
     </style>
 

@@ -1,8 +1,8 @@
 package com.rytis.cipherer;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -11,7 +11,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 
-public class MenuActivity extends Activity {
+public class MenuActivity extends ActionBarActivity {
 
     private ListView menuList;
     private ArrayList<MyMenuItem> menuListItems = new ArrayList<>();
