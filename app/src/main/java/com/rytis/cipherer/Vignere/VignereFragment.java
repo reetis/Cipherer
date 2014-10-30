@@ -180,9 +180,9 @@ public class VignereFragment extends Fragment implements DecodedFragment.Decoded
                 for (int i = 0; i < text.length(); ++i) {
                     char c = text.charAt(i);
                     if (c >= 'a' && c <= 'z') {
-                        c = (char) ((c - 'a' + keyValues.get(i % keyValues.size())) % 26);
+                        c = (char) ((c - 'a' + keyValues.get(i % keyValues.size())) % 26 + 'a');
                     } else if (c >= 'A' && c <= 'Z') {
-                        c = (char) ((c - 'A' + keyValues.get(i % keyValues.size())) % 26);
+                        c = (char) ((c - 'A' + keyValues.get(i % keyValues.size())) % 26 + 'A');
                     }
                     encoded = encoded.concat(String.valueOf(c));
                 }
@@ -208,9 +208,9 @@ public class VignereFragment extends Fragment implements DecodedFragment.Decoded
                 for (int i = 0; i < text.length(); ++i) {
                     char c = text.charAt(i);
                     if (c >= 'a' && c <= 'z') {
-                        c = (char) ((c - 'a' + 26 - keyValues.get(i % keyValues.size())) % 26);
+                        c = (char) ((c - 'a' + 26 - keyValues.get(i % keyValues.size())) % 26 + 'a');
                     } else if (c >= 'A' && c <= 'Z') {
-                        c = (char) ((c - 'A' + 26 - keyValues.get(i % keyValues.size())) % 26);
+                        c = (char) ((c - 'A' + 26 - keyValues.get(i % keyValues.size())) % 26 + 'A');
                     }
                     decoded = decoded.concat(String.valueOf(c));
                 }
