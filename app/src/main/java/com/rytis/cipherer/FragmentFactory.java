@@ -39,7 +39,7 @@ public final class FragmentFactory {
         if (ciphersList == null) {
             ciphersList = new LinkedList<>();
             ciphersList.add(new MyMenuItem("Vignere", 1));
-            //ciphersList.add(new MyMenuItem("ROT", 2));
+            ciphersList.add(new MyMenuItem("ROT", 2));
         }
         return ciphersList;
     }
