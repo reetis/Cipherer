@@ -9,9 +9,11 @@
     <string name="drawer_close">Close navigation drawer</string>
 
     <string name="vignere">Vignere</string>
+    <string name="rot">ROT</string>
     <string name="text">Text</string>
     <string name="encoded_text">Encoded Text</string>
     <string name="decoded_text">Text</string>
     <string name="key_text">Key</string>
+    <string name="key_not_number">Key should be number</string>
 
 </resources>
