@@ -2,6 +2,7 @@ package com.rytis.cipherer;
 
 import android.support.v4.app.Fragment;
 
+import com.rytis.cipherer.ASCII.ASCIIFragment;
 import com.rytis.cipherer.ROT.ROTFragment;
 import com.rytis.cipherer.Vignere.VignereFragment;
 
@@ -21,6 +22,8 @@ public final class FragmentFactory {
                 return VignereFragment.newInstance();
             case 2:
                 return ROTFragment.newInstance();
+            case 3:
+                return ASCIIFragment.newInstance();
             default:
                 return null;
         }
@@ -40,6 +43,7 @@ public final class FragmentFactory {
             ciphersList = new LinkedList<>();
             ciphersList.add(new MyMenuItem("Vignere", 1));
             ciphersList.add(new MyMenuItem("ROT", 2));
+            ciphersList.add(new MyMenuItem("ASCII", 3));
         }
         return ciphersList;
     }

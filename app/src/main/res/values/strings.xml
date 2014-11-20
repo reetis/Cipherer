@@ -15,5 +15,8 @@
     <string name="decoded_text">Text</string>
     <string name="key_text">Key</string>
     <string name="key_not_number">Key should be number</string>
+    <string name="ascii">ASCII</string>
+    <string name="ascii_number_exception">Encoded ASCII text is only numbers and spaces</string>
+    <string name="ascii_nan_switch">Encoded text contained non-numerical values</string>
 
 </resources>
