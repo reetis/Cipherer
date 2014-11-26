@@ -37,6 +37,8 @@ public class EncodedFragment extends Fragment {
 
         text = (EditText) view.findViewById(R.id.encodedText);
 
+        setValues(getArguments().getString("initText", ""));
+
         text.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -59,8 +61,12 @@ public class EncodedFragment extends Fragment {
         });
     }
 
-    public static EncodedFragment newInstance(){
-        return new EncodedFragment();
+    public static EncodedFragment newInstance(String text){
+        EncodedFragment fragment = new EncodedFragment();
+        Bundle args = new Bundle();
+        args.putString("initText", text);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public void setValues(String text) {

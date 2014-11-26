@@ -1,5 +1,7 @@
 package com.rytis.cipherer.ASCII;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,7 +21,9 @@ public class ASCIIFragment extends Fragment implements DecodedFragment.DecodedIn
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mViewPager;
     private TabsAdapter adapter;
-    private VignereCoder coder;
+    private ASCIICoder coder;
+
+    private SharedPreferences preferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,10 +33,17 @@ public class ASCIIFragment extends Fragment implements DecodedFragment.DecodedIn
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+
+        String initEncText = preferences.getString("ASCIIEncodedText", "");
+        String initDecText = preferences.getString("ASCIIDecodedText", "");
+        
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        adapter = new TabsAdapter(getChildFragmentManager(), EncodedFragment.newInstance(), DecodedFragment.newInstance());
+        adapter = new TabsAdapter(getChildFragmentManager(),
+                EncodedFragment.newInstance(initEncText),
+                DecodedFragment.newInstance(initDecText));
         mViewPager.setAdapter(adapter);
-        coder = new VignereCoder();
+        coder = new ASCIICoder(initDecText, initEncText);
 
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setDistributeEvenly(true);
@@ -47,16 +58,10 @@ public class ASCIIFragment extends Fragment implements DecodedFragment.DecodedIn
             public void onPageSelected(int i) {
                 Fragment fragment = adapter.getItem(i);
                 if (i == 0) {
-                    //coder.encode();
                     if (!((EncodedFragment) fragment).getText().equals(coder.getEncodedText())) {
                         ((EncodedFragment) fragment).setValues(coder.getEncodedText());
                     }
                 } else {
-//                    try {
-//                        coder.decode();
-//                    } catch (NumberFormatException e) {
-//                        Toast.makeText(getActivity().getApplicationContext(), R.string.ascii_nan_switch, Toast.LENGTH_SHORT).show();
-//                    }
                     if (!((DecodedFragment) fragment).getText().equals(coder.getDecodedText())) {
                         ((DecodedFragment) fragment).setValues(coder.getDecodedText());
                     }
@@ -76,12 +81,16 @@ public class ASCIIFragment extends Fragment implements DecodedFragment.DecodedIn
 
     @Override
     public void onChangedEncodedText(String text) {
+        preferences.edit().putString("ASCIIEncodedText", text).apply();
         coder.setEncodedText(text);
+        preferences.edit().putString("ASCIIDecodedText", coder.getDecodedText()).apply();
     }
 
     @Override
     public void onChangedDecodedText(String text) {
+        preferences.edit().putString("ASCIIDecodedText", text).apply();
         coder.setDecodedText(text);
+        preferences.edit().putString("ASCIIEncodedText", coder.getEncodedText()).apply();
     }
 
     private class TabsAdapter extends FragmentStatePagerAdapter {
@@ -116,16 +125,16 @@ public class ASCIIFragment extends Fragment implements DecodedFragment.DecodedIn
         }
     }
 
-    private class VignereCoder {
+    private class ASCIICoder {
         private String decodedText;
         private String encodedText;
 
-        private VignereCoder(String decodedText, String encodedText) {
+        private ASCIICoder(String decodedText, String encodedText) {
             this.decodedText = decodedText;
             this.encodedText = encodedText;
         }
 
-        private VignereCoder() {
+        private ASCIICoder() {
             this("", "");
         }
 

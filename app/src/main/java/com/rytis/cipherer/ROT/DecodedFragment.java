@@ -23,8 +23,13 @@ public class DecodedFragment extends Fragment {
     public DecodedFragment() {
     }
 
-    public static DecodedFragment newInstance(){
-        return new DecodedFragment();
+    public static DecodedFragment newInstance(String text, int key){
+        DecodedFragment fragment = new DecodedFragment();
+        Bundle args = new Bundle();
+        args.putString("initText", text);
+        args.putInt("initKey", key);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public void setValues(String text, int key) {
@@ -54,6 +59,8 @@ public class DecodedFragment extends Fragment {
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(100);
         numberPicker.setWrapSelectorWheel(false);
+
+        setValues(getArguments().getString("initText", ""), getArguments().getInt("initKey", 0));
 
         numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override

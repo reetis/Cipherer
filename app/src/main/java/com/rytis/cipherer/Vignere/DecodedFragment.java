@@ -23,17 +23,24 @@ public class DecodedFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static DecodedFragment newInstance(){
-        return new DecodedFragment();
+    public static DecodedFragment newInstance(String text, String key){
+        DecodedFragment fragment = new DecodedFragment();
+        Bundle args = new Bundle();
+        args.putString("initText", text);
+        args.putString("initKey", key);
+        fragment.setArguments(args);
+        return fragment;
     }
 
-    public void setValues(String text, String key) {
-        this.text.setText(text);
-        this.key.setText(key);
-    }
-
-    public String getText() {
-        return text.getText().toString();
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (DecodedInteractionListener) getParentFragment();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getParentFragment().toString()
+                    + " must implement DecoderInteractionListener");
+        }
     }
 
     @Override
@@ -49,6 +56,7 @@ public class DecodedFragment extends Fragment {
 
         text = (EditText) view.findViewById(R.id.decodedText);
         key = (EditText) view.findViewById(R.id.keyText);
+        setValues(getArguments().getString("initText", ""), getArguments().getString("initKey", ""));
 
         text.addTextChangedListener(new TextWatcher() {
             @Override
@@ -86,18 +94,14 @@ public class DecodedFragment extends Fragment {
 
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (DecodedInteractionListener) getParentFragment();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getParentFragment().toString()
-                    + " must implement DecoderInteractionListener");
-        }
+    public void setValues(String text, String key) {
+        this.text.setText(text);
+        this.key.setText(key);
     }
 
-
+    public String getText() {
+        return text.getText().toString();
+    }
 
     @Override
     public void onDetach() {

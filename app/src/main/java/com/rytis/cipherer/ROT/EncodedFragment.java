@@ -40,6 +40,7 @@ public class EncodedFragment extends Fragment {
         numberPicker.setMaxValue(100);
         numberPicker.setWrapSelectorWheel(false);
 
+        setValues(getArguments().getString("initText", ""), getArguments().getInt("initKey", 0));
 
         numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
@@ -75,8 +76,13 @@ public class EncodedFragment extends Fragment {
         }
     }
 
-    public static EncodedFragment newInstance(){
-        return new EncodedFragment();
+    public static EncodedFragment newInstance(String text, int key){
+        EncodedFragment fragment = new EncodedFragment();
+        Bundle args = new Bundle();
+        args.putString("initText", text);
+        args.putInt("initKey", key);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public void setValues(String text, int key) {

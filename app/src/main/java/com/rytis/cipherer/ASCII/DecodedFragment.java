@@ -22,8 +22,12 @@ public class DecodedFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static DecodedFragment newInstance(){
-        return new DecodedFragment();
+    public static DecodedFragment newInstance(String text){
+        DecodedFragment fragment = new DecodedFragment();
+        Bundle args = new Bundle();
+        args.putString("initText", text);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public void setValues(String text) {
@@ -46,6 +50,7 @@ public class DecodedFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         text = (EditText) view.findViewById(R.id.decodedText);
+        setValues(getArguments().getString("initText", ""));
 
         text.addTextChangedListener(new TextWatcher() {
             @Override

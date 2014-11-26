@@ -17,11 +17,31 @@ import com.rytis.cipherer.R;
 * Created by rytis on 14.10.29.
 */
 public class EncodedFragment extends Fragment {
-    EditText text;
-    EditText key;
+    private EditText text;
+    private EditText key;
     private EncodedInteractionListener mListener;
 
     public EncodedFragment() {
+    }
+
+    public static EncodedFragment newInstance(String text, String key){
+        EncodedFragment fragment = new EncodedFragment();
+        Bundle args = new Bundle();
+        args.putString("initText", text);
+        args.putString("initKey", key);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (EncodedInteractionListener) getParentFragment();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getParentFragment().toString()
+                    + " must implement EncoderInteractionListener");
+        }
     }
 
     @Override
@@ -37,6 +57,7 @@ public class EncodedFragment extends Fragment {
 
         text = (EditText) view.findViewById(R.id.encodedText);
         key = (EditText) view.findViewById(R.id.keyText);
+        setValues(getArguments().getString("initText", ""), getArguments().getString("initKey", ""));
 
         text.addTextChangedListener(new TextWatcher() {
             @Override
@@ -76,9 +97,6 @@ public class EncodedFragment extends Fragment {
 
     }
 
-    public static EncodedFragment newInstance(){
-        return new EncodedFragment();
-    }
 
     public void setValues(String text, String key) {
         this.text.setText(text);
@@ -87,17 +105,6 @@ public class EncodedFragment extends Fragment {
 
     public String getText() {
         return text.getText().toString();
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (EncodedInteractionListener) getParentFragment();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getParentFragment().toString()
-                    + " must implement EncoderInteractionListener");
-        }
     }
 
     @Override

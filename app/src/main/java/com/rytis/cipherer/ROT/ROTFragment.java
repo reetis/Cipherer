@@ -1,5 +1,7 @@
 package com.rytis.cipherer.ROT;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,6 +23,8 @@ public class ROTFragment extends Fragment implements DecodedFragment.DecodedInte
     private TabsAdapter adapter;
     private ROTCoder coder;
 
+    private SharedPreferences preferences;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -29,10 +33,17 @@ public class ROTFragment extends Fragment implements DecodedFragment.DecodedInte
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        String initEncText = preferences.getString("ROTEncodedText", "");
+        String initDecText = preferences.getString("ROTDecodedText", "");
+        int initKey = preferences.getInt("ROTKey", 0);
+        
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        adapter = new TabsAdapter(getChildFragmentManager(), EncodedFragment.newInstance(), DecodedFragment.newInstance());
+        adapter = new TabsAdapter(getChildFragmentManager(),
+                EncodedFragment.newInstance(initEncText, initKey),
+                DecodedFragment.newInstance(initDecText, initKey));
         mViewPager.setAdapter(adapter);
-        coder = new ROTCoder();
+        coder = new ROTCoder(initDecText, initEncText, initKey);
 
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setDistributeEvenly(true);
@@ -47,10 +58,12 @@ public class ROTFragment extends Fragment implements DecodedFragment.DecodedInte
             public void onPageSelected(int i) {
                 Fragment fragment = adapter.getItem(i);
                 if (i == 0) {
-                    //coder.encode();
+                    coder.encode();
+                    preferences.edit().putString("ROTEncodedText", coder.getEncodedText()).apply();
                     ((EncodedFragment) fragment).setValues(coder.getEncodedText(), coder.getKey());
                 } else {
-                    //coder.decode();
+                    coder.decode();
+                    preferences.edit().putString("ROTDecodedText", coder.getDecodedText()).apply();
                     ((DecodedFragment) fragment).setValues(coder.getDecodedText(), coder.getKey());
                 }
             }
@@ -68,17 +81,22 @@ public class ROTFragment extends Fragment implements DecodedFragment.DecodedInte
 
     @Override
     public void onChangedKey(int key) {
+        preferences.edit().putInt("ROTKey", key).apply();
         coder.setKey(key);
     }
 
     @Override
     public void onChangedEncodedText(String text) {
+        preferences.edit().putString("ROTEncodedText", text).apply();
         coder.setEncodedText(text);
+        preferences.edit().putString("ROTDecodedText", coder.getDecodedText()).apply();
     }
 
     @Override
     public void onChangedDecodedText(String text) {
+        preferences.edit().putString("ROTDecodedText", text).apply();
         coder.setDecodedText(text);
+        preferences.edit().putString("ROTEncodedText", coder.getEncodedText()).apply();
     }
 
     private class TabsAdapter extends FragmentStatePagerAdapter {

@@ -1,10 +1,13 @@
 package com.rytis.cipherer.Vignere;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,18 +24,31 @@ public class VignereFragment extends Fragment implements DecodedFragment.Decoded
     private TabsAdapter adapter;
     private VignereCoder coder;
 
+    private SharedPreferences preferences;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         return inflater.inflate(R.layout.fragment_tabbed, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+
+        String initEncText = preferences.getString("VignereEncodedText", "");
+        String initDecText = preferences.getString("VignereDecodedText", "");
+        String initKey = preferences.getString("VignereKey", "");
+
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        adapter = new TabsAdapter(getChildFragmentManager(), EncodedFragment.newInstance(), DecodedFragment.newInstance());
+        adapter = new TabsAdapter(getChildFragmentManager(),
+                EncodedFragment.newInstance(initEncText, initKey),
+                DecodedFragment.newInstance(initDecText, initKey));
         mViewPager.setAdapter(adapter);
-        coder = new VignereCoder();
+
+        coder = new VignereCoder(initDecText, initEncText, initKey);
 
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setDistributeEvenly(true);
@@ -46,12 +62,21 @@ public class VignereFragment extends Fragment implements DecodedFragment.Decoded
             @Override
             public void onPageSelected(int i) {
                 Fragment fragment = adapter.getItem(i);
-                if (i == 0) {
-                    //coder.encode();
-                    ((EncodedFragment) fragment).setValues(coder.getEncodedText(), coder.getKey());
-                } else {
-                    //coder.decode();
-                    ((DecodedFragment) fragment).setValues(coder.getDecodedText(), coder.getKey());
+                if (fragment == null) {
+                    return;
+                }
+                try {
+                    if (i == 0) {
+                        coder.encode();
+                        preferences.edit().putString("VignereEncodedText", coder.getEncodedText()).apply();
+                        ((EncodedFragment) fragment).setValues(coder.getEncodedText(), coder.getKey());
+                    } else if (i == 1){
+                        coder.decode();
+                        preferences.edit().putString("VignereDecodedText", coder.getDecodedText()).apply();
+                        ((DecodedFragment) fragment).setValues(coder.getDecodedText(), coder.getKey());
+                    }
+                } catch (NullPointerException e) {
+                    Log.d("INFO", "Error setting values", e);
                 }
             }
 
@@ -68,17 +93,22 @@ public class VignereFragment extends Fragment implements DecodedFragment.Decoded
 
     @Override
     public void onChangedKey(String key) {
+        preferences.edit().putString("VignereKey", key).apply();
         coder.setKey(key);
     }
 
     @Override
     public void onChangedEncodedText(String text) {
+        preferences.edit().putString("VignereEncodedText", text).apply();
         coder.setEncodedText(text);
+        preferences.edit().putString("VignereDecodedText", coder.getDecodedText()).apply();
     }
 
     @Override
     public void onChangedDecodedText(String text) {
+        preferences.edit().putString("VignereDecodedText", text).apply();
         coder.setDecodedText(text);
+        preferences.edit().putString("VignereEncodedText", coder.getEncodedText()).apply();
     }
 
     private class TabsAdapter extends FragmentStatePagerAdapter {
