@@ -33,6 +33,10 @@ public class DecodedFragment extends Fragment {
         this.numberPicker.setValue(key);
     }
 
+    public String getText() {
+        return text.getText().toString();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

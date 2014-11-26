@@ -32,6 +32,10 @@ public class DecodedFragment extends Fragment {
         this.key.setText(key);
     }
 
+    public String getText() {
+        return text.getText().toString();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

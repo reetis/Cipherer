@@ -23,7 +23,8 @@
         <activity
             android:name=".CipheringActivity"
             android:label="@string/title_activity_ciphering"
-            android:parentActivityName=".MenuActivity" >
+            android:parentActivityName=".MenuActivity"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.rytis.cipherer.MenuActivity" />

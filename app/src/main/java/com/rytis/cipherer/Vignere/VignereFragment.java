@@ -47,10 +47,10 @@ public class VignereFragment extends Fragment implements DecodedFragment.Decoded
             public void onPageSelected(int i) {
                 Fragment fragment = adapter.getItem(i);
                 if (i == 0) {
-                    coder.encode();
+                    //coder.encode();
                     ((EncodedFragment) fragment).setValues(coder.getEncodedText(), coder.getKey());
                 } else {
-                    coder.decode();
+                    //coder.decode();
                     ((DecodedFragment) fragment).setValues(coder.getDecodedText(), coder.getKey());
                 }
             }
@@ -134,7 +134,7 @@ public class VignereFragment extends Fragment implements DecodedFragment.Decoded
 
         public void setDecodedText(String decodedText) {
             this.decodedText = decodedText;
-            //encode();
+            encode();
         }
 
         public String getEncodedText() {
@@ -143,7 +143,7 @@ public class VignereFragment extends Fragment implements DecodedFragment.Decoded
 
         public void setEncodedText(String encodedText) {
             this.encodedText = encodedText;
-            //decode();
+            decode();
         }
 
         public String getKey() {

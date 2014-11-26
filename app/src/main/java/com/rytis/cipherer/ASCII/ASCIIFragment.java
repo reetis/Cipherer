@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.rytis.cipherer.R;
 import com.rytis.cipherer.widgets.SlidingTabLayout;
@@ -48,15 +47,19 @@ public class ASCIIFragment extends Fragment implements DecodedFragment.DecodedIn
             public void onPageSelected(int i) {
                 Fragment fragment = adapter.getItem(i);
                 if (i == 0) {
-                    coder.encode();
-                    ((EncodedFragment) fragment).setValues(coder.getEncodedText());
-                } else {
-                    try {
-                        coder.decode();
-                    } catch (NumberFormatException e) {
-                        Toast.makeText(getActivity().getApplicationContext(), R.string.ascii_nan_switch, Toast.LENGTH_SHORT).show();
+                    //coder.encode();
+                    if (!((EncodedFragment) fragment).getText().equals(coder.getEncodedText())) {
+                        ((EncodedFragment) fragment).setValues(coder.getEncodedText());
                     }
-                    ((DecodedFragment) fragment).setValues(coder.getDecodedText());
+                } else {
+//                    try {
+//                        coder.decode();
+//                    } catch (NumberFormatException e) {
+//                        Toast.makeText(getActivity().getApplicationContext(), R.string.ascii_nan_switch, Toast.LENGTH_SHORT).show();
+//                    }
+                    if (!((DecodedFragment) fragment).getText().equals(coder.getDecodedText())) {
+                        ((DecodedFragment) fragment).setValues(coder.getDecodedText());
+                    }
                 }
             }
 

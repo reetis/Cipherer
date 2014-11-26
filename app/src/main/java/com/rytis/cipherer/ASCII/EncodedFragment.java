@@ -67,6 +67,10 @@ public class EncodedFragment extends Fragment {
         this.text.setText(text);
     }
 
+    public String getText() {
+        return text.getText().toString();
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

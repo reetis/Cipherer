@@ -14,7 +14,7 @@ import android.widget.EditText;
 import com.rytis.cipherer.R;
 
 public class DecodedFragment extends Fragment {
-    EditText text;
+    private EditText text;
 
     private DecodedInteractionListener mListener;
 
@@ -28,6 +28,10 @@ public class DecodedFragment extends Fragment {
 
     public void setValues(String text) {
         this.text.setText(text);
+    }
+
+    public String getText() {
+        return text.getText().toString();
     }
 
     @Override

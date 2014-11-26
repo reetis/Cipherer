@@ -19,7 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:minHeight="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" />
+            android:background="@color/primary"
+            android:theme="@style/Toolbar"/>
         <FrameLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
@@ -27,7 +28,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="304dp"
+        android:layout_width="250dp"
         android:layout_height="match_parent"
         android:layout_gravity="bottom|start"
         android:id="@+id/drawer_container">
@@ -37,11 +38,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:choiceMode="singleChoice"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="0dp"
-            android:background="#ffffffff"
+            android:background="@color/primary"
             android:layout_gravity="bottom|start"
-            android:id="@+id/drawer_list"/>
+            android:id="@+id/drawer_list"
+            android:theme="@style/Toolbar"
+            android:elevation="6dp"
+            android:divider="@color/textColorSecondary"
+            android:dividerHeight="1dp"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"/>
 
     </LinearLayout>
 
