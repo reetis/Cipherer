@@ -1,7 +1,9 @@
 package com.rytis.cipherer;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -17,11 +19,14 @@ public class MenuActivity extends ActionBarActivity {
 
     private ListView menuList;
     private ArrayList<MyMenuItem> menuListItems = new ArrayList<>();
+    private SharedPreferences preferences;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        preferences = getSharedPreferences("CipherFragment", Context.MODE_PRIVATE);
 
         setContentView(R.layout.activity_menu);
 
@@ -44,7 +49,7 @@ public class MenuActivity extends ActionBarActivity {
 
     public void switchWindow(int fragmentId) {
         Intent intent = new Intent(this, CipheringActivity.class);
-        intent.putExtra("FragmentID", fragmentId);
+        preferences.edit().putInt("FragmentID", fragmentId).apply();
         if(intent.resolveActivity(getPackageManager()) != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());

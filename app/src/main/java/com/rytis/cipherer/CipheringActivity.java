@@ -1,6 +1,7 @@
 package com.rytis.cipherer;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -28,20 +29,22 @@ public class CipheringActivity extends ActionBarActivity {
     private ActionBarDrawerToggle drawerToggle;
     private LinearLayout drawerContainer;
 
+    private SharedPreferences preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_ciphering);
-        int fragmentID = getIntent().getExtras().getInt("FragmentID");
+        preferences = getSharedPreferences("CipherFragment", Context.MODE_PRIVATE);
+
+        int fragmentID = preferences.getInt("FragmentID", 1);
 
 
         fragmentManager = getSupportFragmentManager();
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerContainer = (LinearLayout) findViewById(R.id.drawer_container);
 
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -87,6 +90,7 @@ public class CipheringActivity extends ActionBarActivity {
         fragmentManager.beginTransaction()
                 .replace(R.id.container, FragmentFactory.getFragment(listObject.getId()))
                 .commit();
+        preferences.edit().putInt("FragmentID", listObject.getId()).apply();
         menuList.setItemChecked(position, true);
         getSupportActionBar().setTitle(listObject.getLabel());
         drawerLayout.closeDrawer(drawerContainer);
@@ -97,6 +101,13 @@ public class CipheringActivity extends ActionBarActivity {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         drawerToggle.syncState();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
     }
 
     @Override
