@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.rytis.cipherer.R;
@@ -38,6 +39,14 @@ public class EncodedFragment extends Fragment {
         text = (EditText) view.findViewById(R.id.encodedText);
 
         setValues(getArguments().getString("initText", ""));
+
+        ImageButton clearButton = (ImageButton) view.findViewById(R.id.clearText);
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                text.setText("");
+            }
+        });
 
         text.addTextChangedListener(new TextWatcher() {
             @Override

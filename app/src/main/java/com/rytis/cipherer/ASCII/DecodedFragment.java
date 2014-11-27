@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.rytis.cipherer.R;
 
@@ -51,6 +52,14 @@ public class DecodedFragment extends Fragment {
 
         text = (EditText) view.findViewById(R.id.decodedText);
         setValues(getArguments().getString("initText", ""));
+
+        ImageButton clearButton = (ImageButton) view.findViewById(R.id.clearText);
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                text.setText("");
+            }
+        });
 
         text.addTextChangedListener(new TextWatcher() {
             @Override

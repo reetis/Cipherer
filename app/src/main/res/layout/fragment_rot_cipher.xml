@@ -20,9 +20,19 @@
         android:scrollHorizontally="false"
         android:gravity="top" />
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/clearText"
+        android:src="@drawable/ic_menu_delete"
+        android:elevation="3dp"
+        android:contentDescription="@string/clear"
+        android:layout_gravity="end"/>
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:gravity="center">
 
         <TextView
@@ -32,7 +42,8 @@
             android:text="@string/key_text"
             android:id="@+id/textView2"
             android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"/>
+            android:layout_marginRight="16dp"
+            android:layout_gravity="center"/>
 
         <NumberPicker
             android:layout_width="wrap_content"

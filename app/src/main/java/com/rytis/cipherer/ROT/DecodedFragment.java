@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.NumberPicker;
 
 import com.rytis.cipherer.R;
@@ -61,6 +62,14 @@ public class DecodedFragment extends Fragment {
         numberPicker.setWrapSelectorWheel(false);
 
         setValues(getArguments().getString("initText", ""), getArguments().getInt("initKey", 0));
+
+        ImageButton clearButton = (ImageButton) view.findViewById(R.id.clearText);
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                text.setText("");
+            }
+        });
 
         numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override

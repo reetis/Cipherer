@@ -18,5 +18,6 @@
     <string name="ascii">ASCII</string>
     <string name="ascii_number_exception">Encoded ASCII text is only numbers and spaces</string>
     <string name="ascii_nan_switch">Encoded text contained non-numerical values</string>
+    <string name="clear">Clear text</string>
 
 </resources>
