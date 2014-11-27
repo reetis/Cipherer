@@ -1,0 +1,106 @@
+package com.rytis.cipherer.Braille;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+
+import com.rytis.cipherer.R;
+
+public class DecodedFragment extends Fragment {
+    private EditText text;
+
+    private DecodedInteractionListener mListener;
+
+    public DecodedFragment() {
+        // Required empty public constructor
+    }
+
+    public static DecodedFragment newInstance(String text){
+        DecodedFragment fragment = new DecodedFragment();
+        Bundle args = new Bundle();
+        args.putString("initText", text);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public void setValues(String text) {
+        this.text.setText(text);
+    }
+
+    public String getText() {
+        return text.getText().toString();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_braille_text, container, false);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        text = (EditText) view.findViewById(R.id.decodedText);
+        setValues(getArguments().getString("initText", ""));
+
+        ImageButton clearButton = (ImageButton) view.findViewById(R.id.clearText);
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                text.setText("");
+            }
+        });
+
+        text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mListener.onChangedDecodedText(editable.toString());
+            }
+        });
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (DecodedInteractionListener) getParentFragment();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getParentFragment().toString()
+                    + " must implement DecoderInteractionListener");
+        }
+    }
+
+
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface DecodedInteractionListener {
+        public void onChangedDecodedText(String text);
+    }
+
+
+}
