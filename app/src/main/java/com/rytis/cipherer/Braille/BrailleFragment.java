@@ -59,9 +59,9 @@ public class BrailleFragment extends Fragment implements DecodedFragment.Decoded
             public void onPageSelected(int i) {
                 Fragment fragment = adapter.getItem(i);
                 if (i == 0) {
-//                    if (!((EncodedFragment) fragment).getText().equals(coder.getEncodedText())) {
-//                        ((EncodedFragment) fragment).setValues(coder.getEncodedText());
-//                    }
+                    if (!((EncodedFragment) fragment).getText().equals(coder.getEncodedText())) {
+                        ((EncodedFragment) fragment).setValues(coder.getEncodedText());
+                    }
                 } else {
                     coder.decode();
                     preferences.edit().putString("BrailleDecodedText", coder.getDecodedText()).apply();
@@ -158,7 +158,7 @@ public class BrailleFragment extends Fragment implements DecodedFragment.Decoded
         }
 
         public void encode() {
-            //this.encodedText = encode(this.decodedText);
+            this.encodedText = encode(this.decodedText);
         }
 
         public void decode() {
@@ -169,9 +169,111 @@ public class BrailleFragment extends Fragment implements DecodedFragment.Decoded
             String encoded = "";
 //            text = text.trim();
             char c;
+            int newC;
+            text = text.toLowerCase();
             for(int i = 0; i < text.length(); ++i) {
                 c = text.charAt(i);
-                encoded = encoded.concat(Integer.toString((int)c) + " ");
+                switch (c) {
+                    case 'a':
+                        newC = 0b1;
+                        break;
+                    case 'b':
+                        newC = 0b11;
+                        break;
+                    case 'c':
+                        newC = 0b1001;
+                        break;
+                    case 'd':
+                        newC = 0b11001;
+                        break;
+                    case 'e':
+                        newC = 0b10001;
+                        break;
+                    case 'f':
+                        newC = 0b1011;
+                        break;
+                    case 'g':
+                        newC = 0b11011;
+                        break;
+                    case 'h':
+                        newC = 0b10011;
+                        break;
+                    case 'i':
+                        newC = 0b1010;
+                        break;
+                    case 'j':
+                        newC = 0b11010;
+                        break;
+                    case 'k':
+                        newC = 0b101;
+                        break;
+                    case 'l':
+                        newC = 0b111;
+                        break;
+                    case 'm':
+                        newC = 0b1101;
+                        break;
+                    case 'n':
+                        newC = 0b11101;
+                        break;
+                    case 'o':
+                        newC = 0b10101;
+                        break;
+                    case 'p':
+                        newC = 0b1111;
+                        break;
+                    case 'q':
+                        newC = 0b11111;
+                        break;
+                    case 'r':
+                        newC = 0b10111;
+                        break;
+                    case 's':
+                        newC = 0b1110;
+                        break;
+                    case 't':
+                        newC = 0b11110;
+                        break;
+                    case 'u':
+                        newC = 0b100101;
+                        break;
+                    case 'v':
+                        newC = 0b100111;
+                        break;
+                    case 'w':
+                        newC = 0b111010;
+                        break;
+                    case 'x':
+                        newC = 0b101101;
+                        break;
+                    case 'y':
+                        newC = 0b111101;
+                        break;
+                    case 'z':
+                        newC = 0b110101;
+                        break;
+                    case '!':
+                        newC = 0b10110;
+                        break;
+                    case '\'':
+                        newC = 0b100;
+                        break;
+                    case ',':
+                        newC = 0b10;
+                        break;
+                    case '-':
+                        newC = 0b100100;
+                        break;
+                    case '.':
+                        newC = 0b110010;
+                        break;
+                    case '?':
+                        newC = 0b100110;
+                        break;
+                    default:
+                        newC = ' ';
+                }
+                encoded = encoded + (char) (newC + 10240);
             }
             return encoded;
         }
@@ -182,7 +284,7 @@ public class BrailleFragment extends Fragment implements DecodedFragment.Decoded
                 return "";
             }
             String decoded = "";
-            int c = 10240;
+            int c;
             char newC;
             for(int i = 0; i < text.length(); ++i) {
                 c = text.charAt(i) - 10240;
